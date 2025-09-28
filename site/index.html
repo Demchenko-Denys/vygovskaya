@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Романтичне привітання</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#ff7aa2;
+      --accent-2:#7ad3ff;
+      --muted:rgba(255,255,255,0.75);
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --radius:14px;
+      --glass-border: rgba(255,255,255,0.06);
+      --max-width:1150px;
+      font-family: Inter, "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      padding:28px;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,122,162,0.06), transparent 8%),
+                  radial-gradient(900px 500px at 90% 90%, rgba(122,211,255,0.04), transparent 6%),
+                  var(--bg);
+      color:#fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      justify-content:center;
+      font-size:15px;
+      line-height:1.4;
+    }
+    .container{ width:100%; max-width:var(--max-width); margin:0 auto; }
+    header{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:22px; }
+    .brand{ display:flex; gap:14px; align-items:center; }
+    .logo{ width:64px;height:64px;border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex;align-items:center;justify-content:center;font-weight:700; box-shadow:0 10px 30px rgba(0,0,0,0.6); transform:rotate(-8deg); }
+    .brand h1{font-size:20px;margin:0}
+    .brand p{margin:0;font-size:13px;color:var(--muted)}
+    nav{ display:flex; gap:10px; align-items:center; }
+    .navbtn{ background:transparent;border:1px solid var(--glass-border); padding:8px 12px;border-radius:10px;color:var(--muted); cursor:pointer; backdrop-filter: blur(6px); }
+    .navbtn.primary{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#061220; font-weight:700; border:none; }
+    main{ display:block; } /* simplified: page is single column now */
+    @media (max-width:980px){ main{ } .aside-sticky{ position:static !important; } }
+    .card{ background:linear-gradient(180deg,var(--card), rgba(255,255,255,0.02)); border-radius:var(--radius); padding:18px; border:1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    .hero{ display:flex; gap:18px; align-items:center; border-radius:12px; padding:18px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); }
+    .greeting{ font-size:22px; margin:0 0 6px 0; }
+    .subtitle{ color:var(--muted); margin:0; font-size:14px; }
+    .cover-photo{ width:200px;height:200px;border-radius:12px;overflow:hidden;flex-shrink:0;border:1px solid rgba(255,255,255,0.05); }
+    .cover-photo img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s }
+    .cover-photo:hover img{ transform:scale(1.05) }
+    .gallery-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+    .gallery-grid img{ width:100%; height:400px; object-fit:cover; border-radius:8px; cursor:pointer; border:1px solid var(--glass-border); transition:transform .3s, box-shadow .3s; }
+    .gallery-grid img:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.6) }
+    .video-thumb{ position:relative; border-radius:12px; overflow:hidden; cursor:pointer; }
+    .video-thumb::after{ content:"▶"; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:30px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); padding:10px; border-radius:50%; box-shadow:0 10px 30px rgba(122,211,255,0.08) }
+    .puzzles{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    @media (max-width:720px){ .puzzles{ grid-template-columns:1fr } }
+    .puzzle{ padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border:1px solid var(--glass-border); }
+    .input-row{ display:flex; gap:8px; margin-top:8px; }
+    .input-row input{ flex:1; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:#fff; }
+    .input-row button{ padding:10px 12px; border-radius:10px; border:none; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#061220; font-weight:700; cursor:pointer; }
+    .hint{ font-size:13px; color:rgba(255,255,255,0.6); margin-top:8px; }
+    .memories{ display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+    .memory-item{ padding:10px; border-radius:10px; background:var(--glass-2); border:1px solid rgba(255,255,255,0.02); font-size:14px; }
+    footer{ margin-top:18px; color:var(--muted); font-size:13px; text-align:center; }
+
+    /* timeline & gallery */
+    .timeline{ position:relative; margin:14px 0; padding-left:34px; }
+    .timeline::before{ content:""; position:absolute; left:16px; top:0; bottom:0; width:6px; background:linear-gradient(var(--accent-2),var(--accent)); border-radius:6px; opacity:0.25; }
+    .event{ position:relative; margin:18px 0; padding:12px 12px 12px 18px; border-radius:12px; background:rgba(255,255,255,0.02); transform:translateY(30px); opacity:0; transition:all .6s ease; }
+    .event.visible{ transform:translateY(0); opacity:1; }
+    .event h3{ margin:0 0 6px; color:var(--accent) }
+    .photo-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:8px; }
+    .photo{ background:rgba(255,255,255,0.03); padding:10px; border-radius:12px; text-align:center; }
+    .photo img{ max-width:100%; border-radius:10px; display:block; margin:0 auto; }
+
+    /* puzzle board */
+    #puzzleBoard { display:grid; grid-template-columns:repeat(3,100px); grid-template-rows:repeat(3,100px); gap:2px; justify-content:center; margin-top:12px; }
+    .tile { width:100px;height:100px; background-size:300px 300px; cursor:grab; border-radius:6px; border:1px solid rgba(255,255,255,0.02); }
+    .tile.selected{ outline:3px solid rgba(122,211,255,0.18); transform:scale(1.03); }
+
+    /* modal & confetti */
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.9)); z-index:90; padding:20px; }
+    .modal.open{ display:flex; }
+    .media{ max-width:1100px; width:100%; max-height:90vh; border-radius:12px; overflow:hidden; }
+    .modal img, .modal video{ width:100%; height:auto; display:block; }
+    #confetti-canvas{ position:fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:95; display:none; }
+
+    /* small */
+    .fade-in { opacity:0; transform:translateY(8px); animation:fadeIn .6s forwards }
+    @keyframes fadeIn{ to{ opacity:1; transform:none } }
+    input:focus, button:focus{ outline: 3px solid rgba(122,211,255,0.08); outline-offset:3px; }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">❤️</div>
+        <div>
+          <h1>Для тебе - з любов'ю</h1>
+          <p>Хочеться як завжди трошечки згадати, тому підготував: фото, відео, ребуси та спогади</p>
+        </div>
+      </div>
+
+      <nav>
+        <button class="navbtn" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">Головне</button>
+        <button class="navbtn" onclick="document.getElementById('gallery-section').scrollIntoView({behavior:'smooth'})">Галерея</button>
+        <button class="navbtn" onclick="document.getElementById('puzzles').scrollIntoView({behavior:'smooth'})">Ребуси</button>
+        <button class="navbtn primary" id="open-love-letter">Відкрити лист</button>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <!-- HERO -->
+        <div id="hero" class="card hero fade-in">
+          <div style="flex:1">
+            <h2 class="greeting">З Днем Народження, VYGOVSKAYA <span class="heart" style="display:inline-block;margin-left:6px;">❤</span></h2>
+            <p class="subtitle">Сьогодні - твій особливий день і я хотів би, щоб ти пам'ятала наскільки ти цінна для мене. Кожна фотографія, кожне відео - це сторінка історії, яку неможливо забути.</p>
+            <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+              <button class="navbtn primary" onclick="openModal('videoModal')">Дивитись відео</button>
+              <button class="navbtn" onclick="document.getElementById('puzzles').scrollIntoView({behavior:'smooth'})">Ребуси & Загадки</button>
+              <button class="navbtn" onclick="startSurprise()">Подарунок</button>
+              <!-- BUTTON FOR AUDIO -->
+              <button id="toggleAudioBtn" class="navbtn" onclick="toggleAudio()">Увімкнути музику</button>
+            </div>
+          </div>
+          <div class="cover-photo" title="Наша спільна мить">
+            <img id="coverImage" src="images/cover.jpg" alt="Наша світлина">
+          </div>
+        </div>
+
+        <!-- GALLERY -->
+        <div id="gallery-section" class="card" style="margin-top:14px">
+          <h3 style="margin:0 0 10px 0">Галерея фото</h3>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+            <button class="navbtn" onclick="sortPhotos('asc')">Спочатку старі</button>
+            <button class="navbtn" onclick="sortPhotos('desc')">Спочатку нові</button>
+            <div style="flex:1"></div>
+            
+          </div>
+          <div id="gallery" class="gallery-grid">
+            <!-- images rendered by JS -->
+          </div>
+        </div>
+
+        <!-- VIDEO -->
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0 0 10px 0">Трошки ностальгії</h3>
+          <div class="video-thumb" onclick="openModal('videoModal')" style="height:220px;">
+            <img id="videoPoster" src="images/video.jpg" style="width:100%;height:100%;object-fit:cover;display:block">
+          </div>
+        </div>
+
+        <!-- PUZZLES -->
+        <div id="puzzles" class="card" style="margin-top:14px">
+          <h3 style="margin:0 0 10px 0">Ребуси та загадки</h3>
+          <div class="puzzles">
+            <div class="puzzle" id="rebusPuzzle">
+              <h3>Ребус</h3>
+              <p>Подивись відео, потрібно вписати слово, яке охарактеризує продовження (без пробілів).</p>
+              <div style="display:flex;gap:8px;margin-bottom:8px">
+                <div style="flex:1;text-align:center;border-radius:10px;overflow:hidden">
+                  <video controls style="max-height:250px;">
+        <source src="videos/rebus1.mp4" type="video/mp4">
+        Ваш браузер не підтримує відео.
+      </video>
+
+                </div>
+                <div style="flex:1;text-align:center;border-radius:10px;overflow:hidden">
+                  <video controls style="max-height:250px;">
+        <source src="videos/rebus2.mp4" type="video/mp4">
+        Ваш браузер не підтримує відео.
+      </video>
+                </div>
+                <div style="flex:1;text-align:center;border-radius:10px;overflow:hidden">
+                  <video controls style="max-height:250px;">
+        <source src="videos/rebus3.mp4" type="video/mp4">
+        Ваш браузер не підтримує відео.
+      </video>
+
+                </div>
+              </div>
+              <div class="input-row">
+                <input id="rebusAnswer" placeholder="Введи відповідь...">
+                <button onclick="checkRebus()">Перевірити</button>
+              </div>
+              <div class="hint" id="rebusHint">Підказка: це щось, що ми обоє любимо.</div>
+            </div>
+
+            <div class="puzzle" id="datePuzzle">
+              <h3>Загадка про пам'ятну дату</h3>
+              <p>День, який започаткував наші кіновечори: день місяць (формат DD.MM). Вгадай дату.</p>
+              <div class="input-row">
+                <input id="dateAnswer" placeholder="Наприклад 14.02">
+                <button onclick="checkDate()">Перевірити</button>
+              </div>
+              <div class="hint" id="dateHint">Досі згадую той вечір, вечеря на швидкоруч, серіал, ти і я.</div>
+            </div>
+
+            <div class="puzzle" style="grid-column: span 2">
+              <h3>Міні-вікторина</h3>
+              <p>Відповідай на короткі питання - трошечки брейншторма.</p>
+              <div style="display:flex;gap:8px;flex-direction:column">
+                <label class="memory-item">1) Де ми гуляли влітку 2022? <input id="q1" placeholder="Місто/місце" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
+                <label class="memory-item">2) Яка пісня грала на фоні під час нашого першого танцю? <input id="q2" placeholder="Пісня" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
+                <label class="memory-item">3) Назви десерт, який ти обожнюєш (одне слово): <input id="q3" placeholder="Десерт" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="navbtn primary" onclick="checkQuiz()">Перевірити відповіді</button>
+                  <button class="navbtn" onclick="revealHints()">Показати підказки</button>
+                </div>
+                <div id="quizResult" class="hint"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PUZZLE BOARD -->
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0 0 10px 0">Ребус-Пазл</h3>
+          <p>Склади наше фото - перетягни плитки місцями або торкнись двох плиток для обміну.</p>
+          <div id="puzzleBoard" aria-label="Puzzle board"></div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="navbtn" onclick="shufflePuzzle()">Перемішати</button>
+            <button class="navbtn" onclick="checkPuzzle()">Перевірити</button>
+          </div>
+          <div id="puzzleResult" class="hint"></div>
+        </div>
+
+        <footer class="card" style="margin-top:14px">
+          <p>З любов'ю, твій Денис • Натисни «Відкрити лист», щоб прочитати особисте послання.</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODALS -->
+  <div id="imageModal" class="modal" onclick="closeModal('imageModal')">
+    <div class="media" onclick="event.stopPropagation()">
+      <img id="modalImage" src="" alt="Фото">
+    </div>
+  </div>
+
+  <div id="videoModal" class="modal" onclick="closeModal('videoModal')">
+    <div class="media" onclick="event.stopPropagation()">
+      <video id="modalVideo" controls style="max-height:80vh;">
+        <source id="modalVideoSource" src="videos/video.mp4" type="video/mp4">
+        Ваш браузер не підтримує відео.
+      </video>
+    </div>
+  </div>
+
+  <!-- LOVE LETTER (hidden template) -->
+  <template id="loveLetterTemplate">
+    <div class="card" style="max-width:700px;margin:40px auto;padding:30px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border:1px solid rgba(255,255,255,0.04)">
+      <h2>Моє кохання,</h2>
+      <p style="color:var(--muted)">Тут — твоє особисте послання. Замініть цей текст на свій лист — ніжні спогади, обіцянки і плани. Ти можеш вставити кілька параграфів, емодзі, навіть невеликий вбудований список.</p>
+      <p>Я люблю тебе більше, ніж слова можуть сказати. Ти — моя музика, мій дім і моє щастя. З Днем Народження.</p>
+      <div style="text-align:right;margin-top:18px;color:var(--muted)">Твій навіки ✨</div>
+    </div>
+  </template>
+
+  <!-- background audio (no autoplay) -->
+  <audio id="bg-audio" src="" loop preload="none" aria-hidden="true"></audio>
+
+  <script>
+    /* ============================ КОНФІГУРАЦІЯ ============================ */
+    const CONFIG = {
+      coverImage: "images/cover.jpg",
+      galleryImages: [
+        {src:"images/photo1.jpg", text:"Фото 1", date:"2019-05-12"},
+        {src:"images/photo2.jpg", text:"Фото 2", date:"2020-08-03"},
+        {src:"images/photo3.jpg", text:"Фото 3", date:"2021-06-21"},
+        {src:"images/photo4.jpg", text:"Фото 4", date:"2022-02-14"},
+        {src:"images/photo5.jpg", text:"Фото 5", date:"2023-09-10"},
+        {src:"images/photo6.jpg", text:"Фото 6", date:"2024-12-01"}
+      ],
+      videoSrc: "videos/video.mp4",
+      rebusAnswer: "Сніданок",
+      dateAnswer: "12.11",
+      quizAnswers: { q1: "львів", q2: "Не лякай", q3: "чізкейк" },
+      puzzleImage: "images/puzzle.jpg",
+      audioSrc: "audio/song.mp3",
+      timeline: [
+        {title:"Перша зустріч — 12.05.2019", text:'Кафе "Ранок". З цього все почалося ✨', img:"images/meet.jpg", mapQuery:"Київ"},
+        {title:"Перший поцілунок — 03.08.2020", text:"Міст біля річки 🌙", img:"images/kiss.jpg", mapQuery:"Житомир"},
+        {title:"Подорож у Львів — 21.06.2021", text:"Незабутня поїздка 🚂", img:"images/lviv.jpg", mapQuery:"Львів"}
+      ]
+    };
+
+    /* ========== DOM INIT ========== */
+    // safe assignments
+    const cover = document.getElementById('coverImage');
+    if(cover && CONFIG.coverImage) cover.src = CONFIG.coverImage;
+
+    const modalVideoSource = document.getElementById('modalVideoSource');
+    if(modalVideoSource && CONFIG.videoSrc) modalVideoSource.src = CONFIG.videoSrc;
+    const modalVideo = document.getElementById('modalVideo');
+    if(modalVideo) modalVideo.load();
+
+    const videoPoster = document.getElementById('videoPoster');
+    if(videoPoster) videoPoster.src = CONFIG.galleryImages[0]?.src || videoPoster.src;
+
+    /* ========== GALLERY ========== */
+    const galleryEl = document.getElementById('gallery');
+    function renderGallery(list){
+      if(!galleryEl) return;
+      galleryEl.innerHTML = '';
+      list.forEach(p=>{
+        const img = document.createElement('img');
+        img.src = p.src;
+        img.alt = p.text || '';
+        img.dataset.src = p.src;
+        img.title = (p.text || '') + (p.date ? ' • ' + p.date : '');
+        img.addEventListener('click', ()=>{ openImage(p.src); });
+        galleryEl.appendChild(img);
+      });
+    }
+    let currentGallery = [...CONFIG.galleryImages];
+    renderGallery(currentGallery);
+
+    function sortPhotos(order){
+      currentGallery = [...currentGallery].sort((a,b)=> order === 'asc' ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date));
+      renderGallery(currentGallery);
+    }
+    function applyFilter(){
+      const q = (document.getElementById('galleryFilter')?.value || '').toLowerCase().trim();
+      if(!q){ renderGallery(currentGallery); return; }
+      const filtered = currentGallery.filter(p => (p.text||'').toLowerCase().includes(q) || (p.date||'').includes(q));
+      renderGallery(filtered);
+    }
+    function clearFilter(){ if(document.getElementById('galleryFilter')) document.getElementById('galleryFilter').value=''; renderGallery(currentGallery); }
+
+    /* ========== IMAGE LIGHTBOX ========== */
+    function openImage(src){
+      const mi = document.getElementById('modalImage');
+      if(mi) mi.src = src;
+      openModal('imageModal');
+    }
+
+    function openModal(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.classList.add('open');
+      if(id === 'videoModal'){
+        const v = document.getElementById('modalVideo');
+        if(v){ v.currentTime = 0; v.play().catch(()=>{}); }
+      }
+    }
+    function closeModal(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.classList.remove('open');
+      if(id === 'videoModal'){
+        const v = document.getElementById('modalVideo');
+        if(v) v.pause();
+      }
+    }
+    // close modals by clicking outside handled by markup + below ESC handler
+
+    /* ========== REBUS / QUIZ ========== */
+    function normalize(s){ return (s||'').toString().trim().toLowerCase().replace(/\s+/g,''); }
+    function checkRebus(){
+      const el = document.getElementById('rebusAnswer');
+      const val = normalize(el?.value);
+      if(val === normalize(CONFIG.rebusAnswer)){
+        showConfetti();
+        alert("Правильно! ❤️");
+        const hint = document.getElementById('rebusHint'); if(hint) hint.textContent = "Чудово! База наших зустрічей.";
+      } else {
+        shakeField('rebusAnswer');
+        const hint = document.getElementById('rebusHint'); if(hint) hint.textContent = "Мабуть, ще трохи подумай. Пиши без пробілів.";
+      }
+    }
+    function checkDate(){
+      const val = normalize(document.getElementById('dateAnswer')?.value);
+      if(val === normalize(CONFIG.dateAnswer)){
+        showConfetti(); alert("Точно! Це наша пам'ятна дата 🥰");
+        const hint = document.getElementById('dateHint'); if(hint) hint.textContent = "Ти пам'ятаєш все найважливіше.";
+      } else {
+        shakeField('dateAnswer');
+        const hint = document.getElementById('dateHint'); if(hint) hint.textContent = "Ні, не те. Формат: DD.MM (наприклад 03.08).";
+      }
+    }
+    function checkQuiz(){
+      let score = 0;
+      const a1 = normalize(document.getElementById('q1')?.value);
+      const a2 = normalize(document.getElementById('q2')?.value);
+      const a3 = normalize(document.getElementById('q3')?.value);
+      if(CONFIG.quizAnswers.q1 && a1.includes(normalize(CONFIG.quizAnswers.q1))) score++;
+      if(CONFIG.quizAnswers.q2 && a2.includes(normalize(CONFIG.quizAnswers.q2))) score++;
+      if(CONFIG.quizAnswers.q3 && a3.includes(normalize(CONFIG.quizAnswers.q3))) score++;
+      const out = document.getElementById('quizResult');
+      if(out) out.textContent = `Вірних відповідей: ${score} / 3`;
+      if(score >= 2) { showConfetti(); if(out) out.textContent += " — Супер! Маємо подарунок :)"; }
+    }
+    function revealHints(){ alert("Підказки:\n1) Місто у західній Україні\n2) Занадто просто, тому без підказки\n3) Вершковий десерт"); }
+
+    function shakeField(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.transition = 'transform .06s';
+      el.style.transform = 'translateX(-8px)';
+      setTimeout(()=>{ el.style.transform = 'translateX(8px)'; },60);
+      setTimeout(()=>{ el.style.transform = ''; },180);
+    }
+
+    /* ========== CONFETTI (без бібліотек) ========== */
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const ctx = confettiCanvas?.getContext ? confettiCanvas.getContext('2d') : null;
+    let confettiPieces = [];
+    function resizeCanvas(){ if(confettiCanvas){ confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight; } }
+    addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function hslColor(h){ return `hsl(${h}deg 90% 65%)`; }
+    function spawnConfetti(){
+      if(!ctx || !confettiCanvas) return;
+      confettiPieces = [];
+      const count = 70;
+      for(let i=0;i<count;i++){
+        confettiPieces.push({
+          x: Math.random()*confettiCanvas.width,
+          y: Math.random()*-confettiCanvas.height,
+          r: 6+Math.random()*8,
+          color: hslColor(Math.random()*360),
+          tilt: Math.random()*10-5,
+          tiltSpeed: Math.random()*0.1+0.05,
+          vx: Math.random()*4-2,
+          vy: 2+Math.random()*4
+        });
+      }
+    }
+    let confettiAnim = null;
+    function renderConfetti(){
+      if(!ctx) return;
+      ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+      confettiPieces.forEach(p=>{
+        p.x += p.vx; p.y += p.vy; p.tilt += p.tiltSpeed;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.tilt * Math.PI/180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
+        ctx.restore();
+      });
+      confettiPieces = confettiPieces.filter(p => p.y < confettiCanvas.height + 50);
+      if(confettiPieces.length === 0){ stopConfetti(); }
+    }
+    function showConfetti(){
+      if(!ctx || !confettiCanvas) return;
+      spawnConfetti();
+      confettiCanvas.style.display = 'block';
+      if(!confettiAnim) confettiAnim = setInterval(renderConfetti, 1000/60);
+      setTimeout(()=>{ stopConfetti(); }, 4000);
+    }
+    function stopConfetti(){
+      if(confettiAnim){ clearInterval(confettiAnim); confettiAnim = null; }
+      if(confettiCanvas) confettiCanvas.style.display = 'none';
+    }
+
+    /* ========== SURPRISE: letter window ========== */
+    document.getElementById('open-love-letter').addEventListener('click', ()=>{
+      const tpl = document.getElementById('loveLetterTemplate');
+      const w = window.open("", "_blank", "width=800,height=700");
+      if(!w) { alert('Будь ласка, дозволи відкривати вкладки/вікна для цього сайту.'); return; }
+      w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Лист кохання</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#071025;color:#fff;font-family:Inter,Arial;padding:30px}</style></head><body>');
+      w.document.write(tpl.innerHTML);
+      w.document.write('</body></html>');
+      w.document.title = "Лист кохання";
+    });
+
+    function startSurprise(){
+      showConfetti();
+      const message = "З Днем Народження! Люблю тебе безмежно! \n \nСправжній подарунок ще в дорозі, але обіцяю здивувати";
+      setTimeout(()=>alert(message),700);
+    }
+
+    /* ========== SHORT SOUND (WebAudio) ========== */
+    function playShortSound(){
+      try{
+        const ctxA = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctxA.createOscillator(), g = ctxA.createGain();
+        o.type = "sine"; o.frequency.value = 880;
+        g.gain.value = 0.0001;
+        o.connect(g); g.connect(ctxA.destination);
+        o.start();
+        g.gain.exponentialRampToValueAtTime(0.12, ctxA.currentTime + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctxA.currentTime + 0.6);
+        setTimeout(()=>{ o.stop(); ctxA.close(); },700);
+      }catch(e){ console.warn('Audio failed', e); }
+    }
+
+    /* ========== BACKGROUND AUDIO CONTROL (requires user gesture) ========== */
+    const audioEl = document.getElementById('bg-audio');
+    let bgAudioPlaying = false;
+    // set audio src if configured
+    if(audioEl && CONFIG.audioSrc) audioEl.src = CONFIG.audioSrc;
+
+    function toggleAudio(){
+      if(!audioEl || !audioEl.src){
+        alert('Аудіо не налаштовано. Встанови CONFIG.audioSrc.');
+        return;
+      }
+      // toggle play/pause with nicer UI feedback
+      const btn = document.getElementById('toggleAudioBtn');
+      if(audioEl.paused){
+        audioEl.play().then(()=> {
+          bgAudioPlaying = true;
+          if(btn) btn.textContent = 'Вимкнути музику';
+        }).catch(err=>{
+          // play blocked — try resume on user gesture by prompting
+          console.warn('Autoplay blocked', err);
+          alert('Відтворення заблоковано браузером. Натисни кнопку ще раз або дозволь відтворення у вкладці.');
+        });
+      } else {
+        audioEl.pause();
+        bgAudioPlaying = false;
+        if(btn) btn.textContent = 'Увімкнути музику';
+      }
+    }
+
+    /* ========== COUNTDOWN - only run if the elements exist (we removed the right sidebar) ========== */
+    function startCountdown(){
+      if(!document.getElementById('cdDays')) return; // guard: if not present, do nothing
+      function update(){
+        const now = new Date();
+        const then = new Date(CONFIG.countdownTo);
+        const diff = then - now;
+        if(diff <= 0){
+          document.getElementById('cdDays').textContent = "00";
+          document.getElementById('cdHours').textContent = "00";
+          document.getElementById('cdMins').textContent = "00";
+          return;
+        }
+        const minutes = Math.floor(diff/60000)%60;
+        const hours = Math.floor(diff/3600000)%24;
+        const days = Math.floor(diff/86400000);
+        document.getElementById('cdDays').textContent = String(days).padStart(2,'0');
+        document.getElementById('cdHours').textContent = String(hours).padStart(2,'0');
+        document.getElementById('cdMins').textContent = String(minutes).padStart(2,'0');
+      }
+      update();
+      setInterval(update, 1000);
+    }
+    // safe call (will exit immediately if elements missing)
+    startCountdown();
+
+    /* ========== TIMELINE RENDERING & OBSERVER ========== */
+    function renderTimeline(){
+      const el = document.getElementById('timeline');
+      if(!el) return;
+      el.innerHTML = '';
+      CONFIG.timeline.forEach(evt=>{
+        const div = document.createElement('div');
+        div.className = 'event';
+        div.innerHTML = `<h3>${evt.title}</h3><p style="margin:6px 0 0 0;color:var(--muted)">${evt.text}</p>
+                         ${evt.img ? `<img src="${evt.img}" alt="${evt.title}" style="max-width:250px;border-radius:10px;margin-top:8px;display:block">` : ''}
+                         <iframe src="https://maps.google.com/maps?q=${encodeURIComponent(evt.mapQuery || '')}&output=embed" style="width:250px;height:150px;border:none;border-radius:8px;margin-top:8px"></iframe>`;
+        el.appendChild(div);
+      });
+      const events = el.querySelectorAll('.event');
+      const observer = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting) e.target.classList.add('visible');
+        });
+      },{threshold:0.2});
+      events.forEach(ev=>observer.observe(ev));
+    }
+    renderTimeline();
+
+    /* ========== RENDER MEMORIES if container exists (guard) ========== */
+    function renderMemories(){
+      const m = document.getElementById('memList');
+      if(!m) return;
+      m.innerHTML = '';
+      CONFIG.timeline.forEach(t=>{
+        const div = document.createElement('div');
+        div.className = 'memory-item';
+        div.textContent = `${t.title} — ${t.text}`;
+        m.appendChild(div);
+      });
+    }
+    renderMemories();
+
+    /* ========== PUZZLE (drag & drop swap + click-swap fallback) ========== */
+    const board = document.getElementById('puzzleBoard');
+    let tiles = [];
+
+    function initPuzzle(){
+      if(!board) return;
+      board.innerHTML = '';
+      tiles = [];
+      const positions = [];
+      for(let i=0;i<9;i++) positions.push(i);
+      // shuffle positions
+      positions.sort(()=>Math.random()-0.5);
+      positions.forEach((pos,index)=>{
+        const x = -(pos%3)*100;
+        const y = -Math.floor(pos/3)*100;
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.style.backgroundImage = `url('${CONFIG.puzzleImage}')`;
+        tile.style.backgroundPosition = `${x}px ${y}px`;
+        tile.style.backgroundRepeat = 'no-repeat';
+        tile.draggable = true;
+        tile.dataset.correct = pos; // not used in current check but stored
+        tile.dataset.index = index;
+        // drag handlers
+        tile.addEventListener('dragstart', (e)=>{
+          dragged = e.target;
+          // set dataTransfer for Firefox compatibility
+          try{ e.dataTransfer.setData('text/plain',''); }catch(_){}
+        });
+        // click-to-select for touch devices / fallback
+        tile.addEventListener('click', (e)=>{
+          handleTileClick(e.target);
+        });
+        board.appendChild(tile);
+        tiles.push(tile);
+      });
+    }
+    initPuzzle();
+
+    let dragged = null;
+    board?.addEventListener('dragover', e=>{ e.preventDefault(); });
+    board?.addEventListener('drop', e=>{
+      e.preventDefault();
+      const target = e.target;
+      if(target && target.classList && target.classList.contains('tile') && dragged && dragged !== target){
+        // swap background positions
+        const temp = dragged.style.backgroundPosition;
+        dragged.style.backgroundPosition = target.style.backgroundPosition;
+        target.style.backgroundPosition = temp;
+        // clear selection if any
+        clearSelection();
+      }
+    });
+
+    // click-swap fallback: select first, then second -> swap
+    let selectedTile = null;
+    function handleTileClick(tile){
+      if(!tile || !tile.classList.contains('tile')) return;
+      if(selectedTile === null){
+        selectedTile = tile;
+        tile.classList.add('selected');
+      } else if(selectedTile === tile){
+        // deselect
+        tile.classList.remove('selected');
+        selectedTile = null;
+      } else {
+        // swap
+        const tmp = selectedTile.style.backgroundPosition;
+        selectedTile.style.backgroundPosition = tile.style.backgroundPosition;
+        tile.style.backgroundPosition = tmp;
+        selectedTile.classList.remove('selected');
+        selectedTile = null;
+      }
+    }
+    function clearSelection(){ if(selectedTile){ selectedTile.classList.remove('selected'); selectedTile = null; } }
+
+    function shufflePuzzle(){ initPuzzle(); document.getElementById('puzzleResult').textContent = ''; }
+    function checkPuzzle(){
+      if(!board) return;
+      const expectedPositions = [];
+      for(let i=0;i<9;i++){
+        const x = -(i%3)*100;
+        const y = -Math.floor(i/3)*100;
+        expectedPositions.push(`${x}px ${y}px`);
+      }
+      const current = Array.from(board.children).map(ch => ch.style.backgroundPosition);
+      let solved = current.every((pos,idx) => pos === expectedPositions[idx]);
+      const out = document.getElementById('puzzleResult');
+      if(solved){ showConfetti(); if(out) out.textContent = 'Пазл зібраний! 🎉'; }
+      else { if(out) out.textContent = 'Ще не зовсім — продовжуй :)'; }
+    }
+
+    /* ========== UTILS & CLEANUP ========== */
+    document.querySelectorAll('.fade-in').forEach((el,i)=>{ el.style.animationDelay = (i*0.08)+'s'; });
+
+    // ESC closes modals
+    document.addEventListener('keydown', e=>{
+      if(e.key === 'Escape'){
+        document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));
+        const v = document.getElementById('modalVideo'); if(v) v.pause();
+      }
+    });
+
+    // click outside media closes modals (already attached by markup)
+    document.querySelectorAll('.modal').forEach(mod=>{
+      mod.addEventListener('click', ()=>{ mod.classList.remove('open'); const v = mod.querySelector('video'); if(v) v.pause(); });
+    });
+
+    // safe image error placeholder
+    document.querySelectorAll('img').forEach(img=>{
+      img.addEventListener('error', ()=>{ img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#0b1220"/><text x="50%" y="50%" fill="#999" font-size="18" font-family="Arial" text-anchor="middle" dy=".3em">Зображення не знайдено</text></svg>`); });
+    });
+
+    /* ========== Expose helpers to window for console usage ========== */
+    window.startSurprise = startSurprise;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.sortPhotos = sortPhotos;
+    window.applyFilter = applyFilter;
+    window.clearFilter = clearFilter;
+    window.shufflePuzzle = shufflePuzzle;
+    window.checkPuzzle = checkPuzzle;
+    window.toggleAudio = toggleAudio;
+    window.openVideoAt = function(t){ openModal('videoModal'); const v = document.getElementById('modalVideo'); if(v){ v.currentTime = t||0; v.play().catch(()=>{}); } };
+
+    // Initialize optional UI states (if audio file exists and user hasn't interacted yet, button shows "Увімкнути музику")
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const btn = document.getElementById('toggleAudioBtn');
+      if(btn) btn.textContent = 'Увімкнути музику';
+    });
+  </script>
+</body>
+</html>
