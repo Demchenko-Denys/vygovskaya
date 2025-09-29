@@ -462,11 +462,11 @@
     document.getElementById('open-love-letter').addEventListener('click', ()=>{
       const tpl = document.getElementById('loveLetterTemplate');
       const w = window.open("", "_blank", "width=800,height=700");
-      if(!w) { alert('Будь ласка, дозволи відкривати вкладки/вікна для цього сайту.'); return; }
-      w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Лист кохання</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#071025;color:#fff;font-family:Inter,Arial;padding:30px}</style></head><body>');
+      if(!w) { alert('Будь ласка, дозволь відкривати вкладки/вікна для цього сайту.'); return; }
+      w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Лист для Піжончика</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#071025;color:#fff;font-family:Inter,Arial;padding:30px}</style></head><body>');
       w.document.write(tpl.innerHTML);
       w.document.write('</body></html>');
-      w.document.title = "Лист кохання";
+      w.document.title = "Лист для піжончика";
     });
 
     function startSurprise(){
@@ -715,6 +715,7 @@
   </script>
 </body>
 </html>
+
 
 
 
