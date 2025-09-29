@@ -208,9 +208,9 @@
               <h3>Міні-вікторина</h3>
               <p>Відповідай на короткі питання - трошечки брейншторма.</p>
               <div style="display:flex;gap:8px;flex-direction:column">
-                <label class="memory-item">1) Де ми гуляли влітку 2022? <input id="q1" placeholder="Місто/місце" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
+                <label class="memory-item">1) Як я тебе люблю називати? <input id="q1" placeholder="Прізвисько" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
                 <label class="memory-item">2) Яка пісня грала на фоні під час нашого першого танцю? <input id="q2" placeholder="Пісня" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
-                <label class="memory-item">3) Назви десерт, який ти обожнюєш (одне слово): <input id="q3" placeholder="Десерт" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
+                <label class="memory-item">3) Вечеря, яку я найчастіше готував: <input id="q3" placeholder="Назва" style="margin-left:8px;background:transparent;border:none;color:#fff"></label>
                 <div style="display:flex;gap:8px;margin-top:8px">
                   <button class="navbtn primary" onclick="checkQuiz()">Перевірити відповіді</button>
                   <button class="navbtn" onclick="revealHints()">Показати підказки</button>
@@ -284,14 +284,9 @@
       videoSrc: "videos/video.mp4",
       rebusAnswer: "Сніданок",
       dateAnswer: "12.11",
-      quizAnswers: { q1: "львів", q2: "Не лякай", q3: "чізкейк" },
+      quizAnswers: { q1: "Піжончик", q2: "Не лякай", q3: "Яйця Бенедикт" },
       puzzleImage: "images/puzzle.jpg",
       audioSrc: "audio/song.mp3",
-      timeline: [
-        {title:"Перша зустріч — 12.05.2019", text:'Кафе "Ранок". З цього все почалося ✨', img:"images/meet.jpg", mapQuery:"Київ"},
-        {title:"Перший поцілунок — 03.08.2020", text:"Міст біля річки 🌙", img:"images/kiss.jpg", mapQuery:"Житомир"},
-        {title:"Подорож у Львів — 21.06.2021", text:"Незабутня поїздка 🚂", img:"images/lviv.jpg", mapQuery:"Львів"}
-      ]
     };
 
     /* ========== DOM INIT ========== */
@@ -398,9 +393,9 @@
       if(CONFIG.quizAnswers.q3 && a3.includes(normalize(CONFIG.quizAnswers.q3))) score++;
       const out = document.getElementById('quizResult');
       if(out) out.textContent = `Вірних відповідей: ${score} / 3`;
-      if(score >= 2) { showConfetti(); if(out) out.textContent += " — Супер! Маємо подарунок :)"; }
+      if(score >= 2) { showConfetti(); if(out) out.textContent += " — Супер! Діло буде :)"; }
     }
-    function revealHints(){ alert("Підказки:\n1) Місто у західній Україні\n2) Занадто просто, тому без підказки\n3) Вершковий десерт"); }
+    function revealHints(){ alert("Підказки:\n1) Тобі не дуже подобається\n2) Занадто просто, тому без підказки\n3) Назва звучить дуже аристократично"); }
 
     function shakeField(id){
       const el = document.getElementById(id);
@@ -720,6 +715,7 @@
   </script>
 </body>
 </html>
+
 
 
 
